@@ -1,0 +1,24 @@
+2026-03-29 17:56:39 [ERROR]: Image upload failed: Cannot convert undefined or null to object
+2026-03-29 17:59:38 [ERROR]: Image upload failed: Cannot convert undefined or null to object
+2026-03-29 18:00:40 [ERROR]: Image upload failed: Cannot convert undefined or null to object
+2026-03-29 18:01:00 [ERROR]: Image upload failed: Cannot convert undefined or null to object
+2026-03-29 18:01:24 [ERROR]: Image upload failed: Cannot convert undefined or null to object
+2026-03-29 18:04:05 [ERROR]: Image upload failed: Cannot convert undefined or null to object
+2026-03-29 18:06:31 [ERROR]: Image upload failed: Cannot convert undefined or null to object
+2026-03-29 18:10:12 [ERROR]: Image upload failed: Cannot convert undefined or null to object
+2026-03-29 18:12:36 [ERROR]: Image upload failed: Cannot convert undefined or null to object
+2026-03-29 18:13:16 [ERROR]: Image upload failed: Cannot convert undefined or null to object
+2026-03-29 18:14:08 [ERROR]: Image upload failed: Cannot convert undefined or null to object
+2026-03-29 18:17:29 [ERROR]: Image upload failed: Cannot convert undefined or null to object
+2026-03-29 18:18:44 [ERROR]: Image upload failed: Cannot convert undefined or null to object
+2026-03-29 18:26:10 [ERROR]: Event creation failed: E11000 duplicate key error collection: temps-donato.events index: title_1 dup key: { title: "news" }
+2026-03-29 18:26:22 [ERROR]: Event creation failed: E11000 duplicate key error collection: temps-donato.events index: title_1 dup key: { title: "news" }
+2026-03-29 18:27:55 [ERROR]: Event creation failed: E11000 duplicate key error collection: temps-donato.events index: title_1 dup key: { title: "news" }
+2026-03-29 18:28:17 [ERROR]: Event creation failed: E11000 duplicate key error collection: temps-donato.events index: title_1 dup key: { title: "news" }
+2026-03-29 18:28:43 [ERROR]: Event creation failed: E11000 duplicate key error collection: temps-donato.events index: title_1 dup key: { title: "news" }
+2026-03-29 18:31:24 [ERROR]: Event creation failed: E11000 duplicate key error collection: temps-donato.events index: title_1 dup key: { title: "news" }
+2026-03-29 18:32:40 [ERROR]: Event creation failed: E11000 duplicate key error collection: temps-donato.events index: title_1 dup key: { title: "news" }
+2026-03-29 18:33:21 [ERROR]: Event creation failed: E11000 duplicate key error collection: temps-donato.events index: title_1 dup key: { title: "news" }
+2026-03-29 18:33:25 [ERROR]: Event creation failed: E11000 duplicate key error collection: temps-donato.events index: title_1 dup key: { title: "news" }
+2026-03-29 18:33:50 [ERROR]: Event creation failed: E11000 duplicate key error collection: temps-donato.events index: title_1 dup key: { title: "news" }
+2026-03-29 18:34:02 [ERROR]: Event creation failed: E11000 duplicate key error collection: temps-donato.events index: title_1 dup key: { title: "news" }

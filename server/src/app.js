@@ -1,0 +1,34 @@
+import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import routes from "./routes/index.js";
+import errorHandler from "./middlewares/error.middlewaare.js";
+import rateLimit from "express-rate-limit";
+
+const app = express();
+
+// ========================= Middleware =========================
+app.use(express.json({ limit: "10mb" }));
+app.use(cors());
+
+// ✅ Now body is available
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url} and this is data ${JSON.stringify(req.body)}`);
+  next();
+});
+app.use(helmet());
+// app.use(
+//   rateLimit({
+//     windowMs: 15 * 60 * 1000, // 15 minutes
+//     max: 100, // limit each IP to 100 requests per windowMs
+//     message: "Too many requests from this IP, please try again later.",
+//   })
+// );
+
+// ========================= Routes =========================
+app.use("/api/v1", routes);
+
+// ========================= Error Handler =========================
+app.use(errorHandler);
+
+export default app;
