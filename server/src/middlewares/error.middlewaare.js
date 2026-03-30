@@ -1,15 +1,15 @@
-const errorHandler = (err, req, res, next) => {
-  console.error(err); // log for debugging
+import { serverErrorMessage, envTypes } from "../helper/constants.js";
+const globalErrorHandler = (err, req, res, next) => {
+  console.error("Global Error:", err);
 
-  let statusCode = err.statusCode || 500;
-  let message = err.message || "Internal Server Error";
+  const statusCode = err.statusCode || 500;
 
   res.status(statusCode).json({
-    success: false,
-    message,
-    // Optional: show stack only in dev
-    stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
+    status: false,
+    statusCode,
+    msg: err.message || serverErrorMessage,
+    stack: process.env.NODE_ENV === envTypes.DEVELOPMENT ? undefined : err.stack,
   });
 };
 
-export default errorHandler;
+export { globalErrorHandler };

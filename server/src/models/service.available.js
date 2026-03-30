@@ -21,4 +21,5 @@ const serviceAvailableSchema = new mongoose.Schema({
 
 // ======================== Export Service Available Model ========================
 const ServiceAvailable = mongoose.model("ServiceAvailable", serviceAvailableSchema);
+
 export default ServiceAvailable;

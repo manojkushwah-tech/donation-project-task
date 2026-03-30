@@ -10,13 +10,13 @@ const validateFile = (file) => {
 
 const uploadImage = async (file, folder = "images") => {
   try {
-    console.log("Uploading image...", file);
+    // console.log("Uploading image...", file);
     validateFile(file);
-    console.log("File validated, proceeding to upload...");
+    // console.log("File validated, proceeding to upload...");
 
     // Convert buffer to base64 string for ImageKit
     const base64File = file.buffer.toString('base64');
-    console.log("Base64 file length:", base64File.length);
+    // console.log("Base64 file length:", base64File.length);
 
     const uploadParams = {
       file: base64File,
@@ -24,11 +24,11 @@ const uploadImage = async (file, folder = "images") => {
       folder: folder,
       useUniqueFileName: false,
     };
-    console.log("Upload params keys:", Object.keys(uploadParams));
+    // console.log("Upload params keys:", Object.keys(uploadParams));
 
     const response = await imagekit.upload(uploadParams);
 
-    console.log("ImageKit response received");
+    //console.log("ImageKit response received");
 
     return {
       fileId: response.fileId,

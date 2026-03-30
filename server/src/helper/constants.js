@@ -1,10 +1,15 @@
-import e from "express";
 
 export const serverErrorMessage = "Internal Server Error";
+
 export const envTypes = {
   DEVELOPMENT: "development",
   PRODUCTION: "production",
 };
+
+export const roles = {
+  ADMIN: "admin",
+  USER: "user",
+}
 
 export const httpStatus = {
   OK: 200,
@@ -26,9 +31,10 @@ export const serviceMessages = {
   UNAVAILABLE: "Service is currently unavailable. Please try again later.",
 };
 
-export const occasionMessages = {
+export const eventMessages = {
   CREATED: "Event created successfully",
   CREATE_FAILED: "Failed to create event",
+  ALREADY_EXISTS: "An event with the same title already exists",
 };
 
 export const image = {

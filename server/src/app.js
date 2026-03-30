@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import routes from "./routes/index.js";
-import errorHandler from "./middlewares/error.middlewaare.js";
+import {globalErrorHandler} from "./middlewares/error.middlewaare.js";
 import rateLimit from "express-rate-limit";
 
 const app = express();
@@ -10,12 +10,6 @@ const app = express();
 // ========================= Middleware =========================
 app.use(express.json({ limit: "10mb" }));
 app.use(cors());
-
-// ✅ Now body is available
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url} and this is data ${JSON.stringify(req.body)}`);
-  next();
-});
 app.use(helmet());
 // app.use(
 //   rateLimit({
@@ -29,6 +23,6 @@ app.use(helmet());
 app.use("/api/v1", routes);
 
 // ========================= Error Handler =========================
-app.use(errorHandler);
+app.use(globalErrorHandler);
 
 export default app;

@@ -1,6 +1,7 @@
 import { boolean, ZodError } from "zod";
 import {validationMessages} from "../helper/constants.js";
 
+// ========================= Zod Validation Middleware =========================
 const validate = (schema) => (req, res, next) => {
     try {
         const result = schema.parse(req.body);
