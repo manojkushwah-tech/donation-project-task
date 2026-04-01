@@ -18,7 +18,7 @@ const isServiceAvailable = (serviceName) => {
 
       next();
     } catch (error) {
-      console.error("Service check error:", error);
+      // console.error("Service check error:", error);
       return res.status(500).json({
         success: false,
         message: "Internal server error",

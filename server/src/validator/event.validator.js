@@ -13,6 +13,8 @@ const updateEventSchema = z.object({
     title: z.string().min(1, "Title is required").optional(),
     content: z.string().optional(),
     description: z.string().optional(),
+    status: z.boolean().optional(),
 });
 
+// ========================= Exporting Schemas =========================
 export { createEventSchema, updateEventSchema };

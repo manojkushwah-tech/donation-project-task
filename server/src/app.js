@@ -11,6 +11,13 @@ const app = express();
 app.use(express.json({ limit: "10mb" }));
 app.use(cors());
 app.use(helmet());
+// check comming data 
+app.use((req, res, next) => {
+  console.log(req.method, "Incoming request data:", req.body, req.query, req.params);
+  next();
+});
+
+// ========================= Rate Limiting =========================
 // app.use(
 //   rateLimit({
 //     windowMs: 15 * 60 * 1000, // 15 minutes

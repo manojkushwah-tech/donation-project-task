@@ -1,35 +1,29 @@
 import {
     createEvent,
     getAllEvents,
+    getEventById,
+    updateEvent,
+    deleteEvent
+
 } from "../controllers/event.controller.js";
 import express from "express";
 const router = express.Router();
 import { validate } from "../middlewares/zod.validate.middleware.js";
-import { createEventSchema } from "../validator/event.validator.js";
+import { createEventSchema, updateEventSchema } from "../validator/event.validator.js";
 import { upload } from "../middlewares/upload.middleware.js";
-// import { verifyAdmin } from "../middlewares/token.verify.middleware.js";
+import { verifyAdmin } from "../middlewares/token.verify.middleware.js";
 
 
-// ========================= Create Event =========================
-router.post(
-    "/",
-    // verifyAdmin,
-    upload.single("image"),
-    validate(createEventSchema),
-    createEvent
-);
+// ============================== Admin Routes ==============================
+router.get("/admin", verifyAdmin, getAllEvents);
+router.get("/admin/:id", verifyAdmin, getEventById);
+router.post("/admin", verifyAdmin, upload.single("image"), validate(createEventSchema), createEvent);
+router.put("/admin/:id", verifyAdmin, upload.single("image"), validate(updateEventSchema), updateEvent);
+router.delete("/admin/:id", verifyAdmin, deleteEvent);
 
-// ========================= Get All Events =========================
+// ============================== User Routes ==============================
 router.get("/", getAllEvents);
-
-// ========================= Get Event By ID =========================
-// router.get("/:id", getEventById);
-
-// ========================= Update Event =========================
-// router.put("/:id", verifyAdmin, upload.single("image"), validate(updateEventSchema), updateEvent);
-
-// ========================= Delete Event =========================
-// router.delete("/:id", verifyAdmin, deleteEvent);
+router.get("/:id", getEventById);
 
 
 export default router;

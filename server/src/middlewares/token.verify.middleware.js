@@ -1,10 +1,10 @@
 import jwt from "jsonwebtoken";
-import User from "../models/user.model.js";
-import Admin from "../models/admin.model.js";
+import { User } from "../models/index.js";
 import { errorResponse } from "../helper/response.helper.js";
-import { httpStatus, userMessages, adminMessages } from "../helper/constants.js";
+import { httpStatus, userMessages, adminMessages, roles } from "../helper/constants.js";
 import dotenv from "dotenv";
 dotenv.config();
+
 const extractToken = (req) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return null;
@@ -18,27 +18,29 @@ const extractToken = (req) => {
 
 export const verifyUser = async (req, res, next) => {
   try {
-
     const token = extractToken(req);
-    // console.log("Extracted Token:", token); // Debugging line
     if (!token) {
-      // console.log("No token found in request headers."); // Debugging line
       return errorResponse(res, userMessages.UNAUTHORIZED, httpStatus.UNAUTHORIZED);
     }
-    // console.log("Verifying token..."); // Debugging line
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // console.log("Token verified. Decoded payload:", decoded); // Debugging line
     const user = await User.findById(decoded.userId);
-    // console.log("User fetched from DB:", user); // Debugging line 
+
     if (!user) {
-      // console.log("User not found or invalid."); // Debugging line
       return errorResponse(res, userMessages.UNAUTHORIZED, httpStatus.UNAUTHORIZED);
+    }
+
+    if (!user.status) {
+      return errorResponse(res, "Account is inactive", httpStatus.UNAUTHORIZED);
+    }
+
+    if (!user.isVerified) {
+      return errorResponse(res, "Please verify your email first", httpStatus.UNAUTHORIZED);
     }
 
     req.user = user;
     next();
   } catch (error) {
-    // console.log("Error during token verification:", error); // Debugging line
     return errorResponse(res, userMessages.INVALID_TOKEN, httpStatus.UNAUTHORIZED);
   }
 };
@@ -46,25 +48,36 @@ export const verifyUser = async (req, res, next) => {
 /* ================= ADMIN AUTH ================= */
 
 export const verifyAdmin = async (req, res, next) => {
+  console.log("Verifying admin with headers:", req.headers);
   try {
     const token = extractToken(req);
     if (!token) {
       return errorResponse(res, adminMessages.UNAUTHORIZED, httpStatus.UNAUTHORIZED);
     }
-    // console.log("Verifying admin token..."); // Debugging line
-    // console.log("Admin Token:", token); // Debugging line
-    const decoded = jwt.verify(token, process.env.ADMIN_JWT_SECRET);
-    // console.log("Admin Token verified. Decoded payload:", decoded); // Debugging line
-    const admin = await Admin.findById(decoded.admin._id);
-    // console.log("Admin fetched from DB:", admin); // Debugging line
-    if (!admin || admin.role !== "admin") {
-      // console.log("Admin not found or invalid."); // Debugging line
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.userId);
+
+    if (!user) {
       return errorResponse(res, adminMessages.UNAUTHORIZED, httpStatus.UNAUTHORIZED);
     }
-    // console.log("Admin fetched from DB:", admin); // Debugging line
-    req.admin = admin;
+
+    if (!user.status) {
+      return errorResponse(res, "Account is inactive", httpStatus.UNAUTHORIZED);
+    }
+
+    if (!user.isVerified) {
+      return errorResponse(res, "Please verify your email first", httpStatus.UNAUTHORIZED);
+    }
+
+    if (user.role !== roles.ADMIN) {
+      return errorResponse(res, "Admin access required", httpStatus.FORBIDDEN);
+    }
+
+    req.user = user;
+    req.admin = user; // For backward compatibility
     next();
   } catch (error) {
-    return errorResponse(res, adminMessages.INVALID_TOKEN || error.message, httpStatus.UNAUTHORIZED);
+    return errorResponse(res, adminMessages.INVALID_TOKEN, httpStatus.UNAUTHORIZED);
   }
 };

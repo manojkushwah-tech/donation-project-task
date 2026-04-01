@@ -1,44 +1,44 @@
 import {
-  createEventService,
-  getAllEventsService,
-  getEventByIdService,
-  updateEventService,
-  deleteEventService,
-} from "../services/event.service.js";
+  createFAQService,
+  getAllFAQsService,
+  getFAQByIdService,
+  updateFAQService,
+  deleteFAQService,
+} from "../services/faq.service.js";
 import {
   errorResponse,
   successResponse,
 } from "../helper/response.helper.js";
 import {
-  eventMessages,
+  faqMessages,
   httpStatus,
   roles,
 } from "../helper/constants.js";
 import { getPagination, } from "../utils/pagination.js";
 
-// ========================= Create Event =========================
-export const createEvent = async (req, res) => {
+// ========================= Create FAQ =========================
+export const createFAQ = async (req, res) => {
   try {
 
     const data = req.validatedData;
-    await createEventService(data, req.file);
+    await createFAQService(data);
     return successResponse(
       res,
-      eventMessages.CREATED,
+      faqMessages.CREATED,
       {},
       httpStatus.CREATED
     );
   } catch (error) {
     return errorResponse(
       res,
-      error.message || eventMessages.CREATE_FAILED,
+      error.message || faqMessages.CREATE_FAILED,
       httpStatus.INTERNAL_SERVER_ERROR
     );
   }
 };
 
-// ========================= Get All Events =========================
-export const getAllEvents = async (req, res) => {
+// ========================= Get All FAQs =========================
+export const getAllFAQs = async (req, res) => {
   try {
     const isAdmin = req.user?.role === roles.ADMIN;
 
@@ -49,16 +49,15 @@ export const getAllEvents = async (req, res) => {
     let condition = isAdmin ? {} : { status: true };
 
 
-    const { sort = 'desc', title, description, content, status } = req.query;
-    if (title) condition.title = { $regex: title, $options: "i" };
-    if (description) condition.description = { $regex: description, $options: "i" };
-    if (content) condition.content = { $regex: content, $options: "i" };
+    const { sort = 'desc', question, answer, status } = req.query;
+    if (question) condition.question = { $regex: question, $options: "i" };
+    if (answer) condition.answer = { $regex: answer, $options: "i" };
     if (isAdmin) {
       if (status === "true") condition.status = true;
       else if (status === "false") condition.status = false;
     }
 
-    const { events, total } = await getAllEventsService({
+    const { faqs, total } = await getAllFAQsService({
       condition,
       skip,
       limit,
@@ -67,9 +66,9 @@ export const getAllEvents = async (req, res) => {
 
     return successResponse(
       res,
-      eventMessages.FETCHED_ALL,
+      faqMessages.FETCHED_ALL,
       {
-        events,
+        faqs,
         pagination: {
           total,
           page,
@@ -82,75 +81,74 @@ export const getAllEvents = async (req, res) => {
   } catch (error) {
     return errorResponse(
       res,
-      error.message || eventMessages.FETCH_FAILED,
+      error.message || faqMessages.FETCH_FAILED,
       httpStatus.INTERNAL_SERVER_ERROR
     );
   }
 };
 
-// ========================= Get Event By ID =========================
-export const getEventById = async (req, res) => {
+// ========================= Get FAQ By ID =========================
+export const getFAQById = async (req, res) => {
   try {
     const { id } = req.params;
-    // Implement logic to fetch event by ID
-    const event = await getEventByIdService(id, req.user?.role === roles.ADMIN);
+    // Implement logic to fetch FAQ by ID
+    const faq = await getFAQByIdService(id, req.user?.role === roles.ADMIN);
     return successResponse(
       res,
-      eventMessages.FETCHED,
-      event,
+      faqMessages.FETCHED,
+      faq,
       httpStatus.OK
     );
   } catch (error) {
     return errorResponse(
       res,
-      error.message || eventMessages.FETCH_FAILED,
+      error.message || faqMessages.FETCH_FAILED,
       httpStatus.INTERNAL_SERVER_ERROR
     );
   }
 };
 
-// ========================= Update Event =========================
-export const updateEvent = async (req, res) => {
+// ========================= Update FAQ =========================
+export const updateFAQ = async (req, res) => {
   try {
     const { id } = req.params;
     const data = req.validatedData;
-    // Implement logic to update event by ID with new data and file
+    // Implement logic to update FAQ by ID with new data
     
-    await updateEventService(id, data, req.file);
+    await updateFAQService(id, data);
 
     return successResponse(
       res,
-      eventMessages.UPDATED,
+      faqMessages.UPDATED,
       {},
       httpStatus.OK
     );
   } catch (error) {
     return errorResponse(
       res,
-      error.message || eventMessages.UPDATE_FAILED,
+      error.message || faqMessages.UPDATE_FAILED,
       httpStatus.INTERNAL_SERVER_ERROR
     );
   }
 };
 
-// ========================= Delete Event =========================
-export const deleteEvent = async (req, res) => {
+// ========================= Delete FAQ =========================
+export const deleteFAQ = async (req, res) => {
   try {
     const { id } = req.params;
-    // Implement logic to delete event by ID    
-    await deleteEventService(id);
+    // Implement logic to delete FAQ by ID
+    await deleteFAQService(id);
     return successResponse(
       res,
-      eventMessages.DELETED,
+      faqMessages.DELETED,
       {}, // Replace with actual data
       httpStatus.OK
     );
   } catch (error) {
     return errorResponse(
       res,
-      error.message || eventMessages.DELETE_FAILED,
+      error.message || faqMessages.DELETE_FAILED,
       httpStatus.INTERNAL_SERVER_ERROR
     );
   }
 };
-
