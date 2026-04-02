@@ -4,6 +4,9 @@
 
 # Node modules
 node_modules/
+/admin/node_modules/
+/client/node_modules/
+/server/node_modules/
 
 # Specific folders
 /server/.env
