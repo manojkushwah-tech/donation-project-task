@@ -13,6 +13,7 @@ app.use(cors());
 app.use(helmet());
 // check comming data 
 app.use((req, res, next) => {
+  console.log("url", req.url);
   console.log(req.method, "Incoming request data:", req.body, req.query, req.params);
   next();
 });

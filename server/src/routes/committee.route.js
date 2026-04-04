@@ -20,7 +20,7 @@ router.put("/admin/:id", verifyAdmin, upload.single("image"), validate(updateCom
 router.delete("/admin/:id", verifyAdmin, deleteCommittee);
 
 // ============================== User Routes ==============================
-// router.get("/", getAllCommittees);
-// router.get("/:id", getCommitteeById);
+router.get("/", getAllCommittees);
+router.get("/:id", getCommitteeById);
 
 export default router;

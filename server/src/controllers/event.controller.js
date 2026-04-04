@@ -115,7 +115,7 @@ export const updateEvent = async (req, res) => {
     const { id } = req.params;
     const data = req.validatedData;
     // Implement logic to update event by ID with new data and file
-    
+    console.log("data", data)
     await updateEventService(id, data, req.file);
 
     return successResponse(

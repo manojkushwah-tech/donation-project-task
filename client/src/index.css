@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-primary: #FB4700;
+  --color-body-color: #64748b;
+  --shadow-sticky: 0 8px 20px 0 rgba(0, 0, 0, 0.05);
+  --shadow-btn: 0 4px 10px 0 rgba(251, 71, 0, 0.2);
+  --shadow-btn-hover: 0 8px 20px 0 rgba(251, 71, 0, 0.3);
+}
+
+@layer base {
+  html, body {
+    @apply overflow-x-hidden;
+  }
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans;
+  }
+}
+
+@layer utilities {
+  .container {
+    @apply mx-auto px-4 max-w-7xl;
+  }
+  
+  /* Prevent horizontal overflow */
+  * {
+    box-sizing: border-box;
+  }
+}

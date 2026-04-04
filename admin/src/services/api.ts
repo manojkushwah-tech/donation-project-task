@@ -37,16 +37,16 @@ api.interceptors.response.use(
 export const eventService = {
   getAll: (page = 1, limit = 10) => api.get<ApiResponse<EventData>>(`/event/admin?page=${page}&limit=${limit}`),
   getOne: (id: string) => api.get<ApiResponse<Event>>(`/event/admin/${id}`),
-  create: (data: Omit<Event, '_id'>) => api.post<ApiResponse<Event>>('/event/admin', data),
-  update: (id: string, data: Partial<Event>) => api.put<ApiResponse<Event>>(`/event/admin/${id}`, data),
+  create: (data: any) => api.post<ApiResponse<Event>>('/event/admin', data),
+  update: (id: string, data: any) => api.put<ApiResponse<Event>>(`/event/admin/${id}`, data),
   delete: (id: string) => api.delete<ApiResponse<any>>(`/event/admin/${id}`),
 };
 
 export const committeeService = {
   getAll: (page = 1, limit = 10) => api.get<ApiResponse<CommitteeData>>(`/committee/admin?page=${page}&limit=${limit}`),
   getOne: (id: string) => api.get<ApiResponse<CommitteeMember>>(`/committee/admin/${id}`),
-  create: (data: Omit<CommitteeMember, '_id'>) => api.post<ApiResponse<CommitteeMember>>('/committee/admin', data),
-  update: (id: string, data: Partial<CommitteeMember>) => api.put<ApiResponse<CommitteeMember>>(`/committee/admin/${id}`, data),
+  create: (data: any) => api.post<ApiResponse<CommitteeMember>>('/committee/admin', data),
+  update: (id: string, data: any) => api.put<ApiResponse<CommitteeMember>>(`/committee/admin/${id}`, data),
   delete: (id: string) => api.delete<ApiResponse<any>>(`/committee/admin/${id}`),
 };
 

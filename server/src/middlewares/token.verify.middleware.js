@@ -48,7 +48,7 @@ export const verifyUser = async (req, res, next) => {
 /* ================= ADMIN AUTH ================= */
 
 export const verifyAdmin = async (req, res, next) => {
-  console.log("Verifying admin with headers:", req.headers);
+  // console.log("Verifying admin with headers:", req.headers);
   try {
     const token = extractToken(req);
     if (!token) {

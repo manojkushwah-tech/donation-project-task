@@ -119,9 +119,9 @@ export const getEventByIdService = async (id, isAdmin ) => {
 // ================= Update Event by ID =================
 export const updateEventService = async (id, data, file) => {
   try {
-    console.log("Updating event with ID:", id);
+    // console.log("Updating event with ID:", id);
     const event = await Event.findById(id);
-    console.log("Event found:", event);
+    // console.log("Event found:", event);
     if
       (!event) {
       throw new ApiError(eventMessages.NOT_FOUND, httpStatus.NOT_FOUND);
@@ -135,11 +135,11 @@ export const updateEventService = async (id, data, file) => {
         // ================= Delete Old Image =================
         if (event.image?.fileId) {
           const result = await deleteImage(event.image.fileId);
-          console.log("Image deleted",(result? "successfully" : "failed"));
+          // console.log("Image deleted",(result? "successfully" : "failed"));
         }
       }
       catch (error) {
-        console.error("Image upload failed:", error);
+        // console.error("Image upload failed:", error);
         throw new ApiError(image.messages.UPLOAD_FAILED, httpStatus.BAD_REQUEST);
       }
     }
@@ -155,10 +155,10 @@ export const updateEventService = async (id, data, file) => {
     return updatedEvent;
   } catch (error) {
     if (error instanceof ApiError) {
-      console.error("Error in updateEventService:", error);
+      // console.error("Error in updateEventService:", error);
       throw error;
     }
-    console.error("Unexpected error in updateEventService:", error);
+    // console.error("Unexpected error in updateEventService:", error);
     throw new ApiError(
       eventMessages.UPDATE_FAILED,
       httpStatus.INTERNAL_SERVER_ERROR
@@ -177,7 +177,7 @@ export const deleteEventService = async (id) => {
     // ================= Delete Image =================
     if (event.image?.fileId) {
       const result = await deleteImage(event.image.fileId);
-      console.log("Image deleted",(result? "successfully" : "failed"));
+      // console.log("Image deleted",(result? "successfully" : "failed"));
     }
 
     await Event.findByIdAndDelete(id);

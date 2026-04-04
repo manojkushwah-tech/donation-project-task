@@ -92,9 +92,9 @@ export const getFAQByIdService = async (id, isAdmin ) => {
 // ================= Update FAQ by ID =================
 export const updateFAQService = async (id, data) => {
   try {
-    console.log("Updating FAQ with ID:", id);
+    // console.log("Updating FAQ with ID:", id);
     const faq = await FAQ.findById(id);
-    console.log("FAQ found:", faq);
+    // console.log("FAQ found:", faq);
     if (!faq) {
       throw new ApiError(faqMessages.NOT_FOUND, httpStatus.NOT_FOUND);
     }
@@ -108,10 +108,10 @@ export const updateFAQService = async (id, data) => {
     return updatedFAQ;
   } catch (error) {
     if (error instanceof ApiError) {
-      console.error("Error in updateFAQService:", error);
+      // console.error("Error in updateFAQService:", error);
       throw error;
     }
-    console.error("Unexpected error in updateFAQService:", error);
+    // console.error("Unexpected error in updateFAQService:", error);
     throw new ApiError(
       faqMessages.UPDATE_FAILED,
       httpStatus.INTERNAL_SERVER_ERROR

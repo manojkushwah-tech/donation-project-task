@@ -16,25 +16,36 @@ export function CommitteeForm({ initialData, onSubmit, onCancel, loading }: Comm
     image: '',
     status: true,
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
 
   useEffect(() => {
     if (initialData) {
       const { _id, ...rest } = initialData;
       setFormData(rest);
+      if (rest.image) setImagePreview(rest.image);
     }
   }, [initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    const data = new FormData();
+    data.append('name', formData.name);
+    data.append('designation', formData.designation);
+    data.append('status', String(formData.status));
+    if (imageFile) {
+      data.append('image', imageFile);
+    }
+    onSubmit(data as any);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setFormData({ ...formData, image: reader.result as string });
+        setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -69,8 +80,8 @@ export function CommitteeForm({ initialData, onSubmit, onCancel, loading }: Comm
       <div className="space-y-2">
         <label className="text-sm font-bold text-gray-700">Member Photo</label>
         <div className="flex flex-col gap-4">
-          {formData.image && (
-            <img src={formData.image} alt="Preview" className="h-32 w-full rounded object-cover border border-gray-200" />
+          {imagePreview && (
+            <img src={imagePreview} alt="Preview" className="h-32 w-full rounded object-cover border border-gray-200" />
           )}
           <input
             type="file"

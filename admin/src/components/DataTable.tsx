@@ -88,13 +88,19 @@ export function DataTable<T extends { _id: string; status?: boolean }>({
 
             <div className="flex items-center justify-end gap-2">
               <button
-                onClick={() => onEdit(item)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(item);
+                }}
                 className="p-2 text-gray-400 hover:text-gray-900 transition-colors"
               >
                 <Edit2 size={16} />
               </button>
               <button
-                onClick={() => onDelete(item)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(item);
+                }}
                 className="p-2 text-gray-400 hover:text-red-500 transition-colors"
               >
                 <Trash2 size={16} />

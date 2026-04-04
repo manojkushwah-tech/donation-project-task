@@ -11,4 +11,5 @@ router.use("/event", eventRoutes);
 router.use("/committee", committeeRoutes);
 router.use("/faq", faqRoutes);
 
+
 export default router;

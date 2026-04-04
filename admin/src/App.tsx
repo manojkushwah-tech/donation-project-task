@@ -222,7 +222,8 @@ export default function App() {
     { 
       header: 'Image', 
       accessor: (item: Event) => {
-        const imageUrl = item.image ? (item.image.includes('?') ? `${item.image}&tr=w-50` : `${item.image}?tr=w-50`) : '';
+        if (!item.image) return <div className="h-10 w-10 rounded bg-gray-100 flex items-center justify-center text-[8px] text-gray-400 font-bold uppercase tracking-tighter">No Img</div>;
+        const imageUrl = item.image.includes('?') ? `${item.image}&tr=w-50` : `${item.image}?tr=w-50`;
         return (
           <img src={imageUrl} alt="" className="h-10 w-10 rounded object-cover bg-gray-100" referrerPolicy="no-referrer" />
         );
@@ -237,7 +238,8 @@ export default function App() {
     { 
       header: 'Photo', 
       accessor: (item: CommitteeMember) => {
-        const imageUrl = item.image ? (item.image.includes('?') ? `${item.image}&tr=w-50` : `${item.image}?tr=w-50`) : '';
+        if (!item.image) return <div className="h-10 w-10 rounded bg-gray-100 flex items-center justify-center text-[8px] text-gray-400 font-bold uppercase tracking-tighter">No Img</div>;
+        const imageUrl = item.image.includes('?') ? `${item.image}&tr=w-50` : `${item.image}?tr=w-50`;
         return (
           <img src={imageUrl} alt="" className="h-10 w-10 rounded object-cover bg-gray-100" referrerPolicy="no-referrer" />
         );

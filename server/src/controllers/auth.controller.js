@@ -34,10 +34,10 @@ export const resendOTP = asyncHandler(async (req, res) => {
 
 // ================= Login Controller =================
 export const login = asyncHandler(async (req, res) => {
-  console.log("wewew");
+  // console.log("wewew");
   const { email, password } = req.body;
   const result = await loginService(email, password);
-  console.log("Login result:", result);
+  // console.log("Login result:", result);
   successResponse(res, result.message, result);
 });
 

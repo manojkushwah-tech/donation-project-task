@@ -93,7 +93,7 @@ export const getAllCommitteesService = async ({
       total,
     };
   } catch (error) {
-    console.error("Error in getAllCommitteesService:", error);
+    // console.error("Error in getAllCommitteesService:", error);
     throw new ApiError(
       committeeMessages.FETCH_FAILED,
       httpStatus.INTERNAL_SERVER_ERROR
@@ -106,7 +106,7 @@ export const getCommitteeByIdService = async (id, isAdmin) => {
   try {
     const committee = await Committee.findOne({ _id: id, ...(isAdmin ? {} : { status: true }) }).lean();
     committee.image = committee.image.url; // ✅ Return only the image URL
-    console.log("Committee member found:", committee);
+    // console.log("Committee member found:", committee);
     if (!committee) {
       throw new ApiError(committeeMessages.NOT_FOUND, httpStatus.NOT_FOUND);
     }
@@ -125,9 +125,9 @@ export const getCommitteeByIdService = async (id, isAdmin) => {
 // ================= Update Committee Member by ID =================
 export const updateCommitteeService = async (id, data, file) => {
   try {
-    console.log("Updating committee member with ID:", id);
+    // console.log("Updating committee member with ID:", id);
     const committee = await Committee.findById(id);
-    console.log("Committee member found:", committee);
+    // console.log("Committee member found:", committee);
     if (!committee) {
       throw new ApiError(committeeMessages.NOT_FOUND, httpStatus.NOT_FOUND);
     }
@@ -140,11 +140,11 @@ export const updateCommitteeService = async (id, data, file) => {
         // ================= Delete Old Image =================
         if (committee.image?.fileId) {
           const result = await deleteImage(committee.image.fileId);
-          console.log("Image deleted", (result ? "successfully" : "failed"));
+          // console.log("Image deleted", (result ? "successfully" : "failed"));
         }
       }
       catch (error) {
-        console.error("Image upload failed:", error);
+        // console.error("Image upload failed:", error);
         throw new ApiError(image.messages.UPLOAD_FAILED, httpStatus.BAD_REQUEST);
       }
     }
@@ -159,10 +159,10 @@ export const updateCommitteeService = async (id, data, file) => {
     return updatedCommittee;
   } catch (error) {
     if (error instanceof ApiError) {
-      console.error("Error in updateCommitteeService:", error);
+      // console.error("Error in updateCommitteeService:", error);
       throw error;
     }
-    console.error("Unexpected error in updateCommitteeService:", error);
+    // console.error("Unexpected error in updateCommitteeService:", error);
     throw new ApiError(
       committeeMessages.UPDATE_FAILED,
       httpStatus.INTERNAL_SERVER_ERROR
@@ -181,7 +181,7 @@ export const deleteCommitteeService = async (id) => {
     // ================= Delete Image =================
     if (committee.image?.fileId) {
       const result = await deleteImage(committee.image.fileId);
-      console.log("Image deleted", (result ? "successfully" : "failed"));
+      // console.log("Image deleted", (result ? "successfully" : "failed"));
     }
 
     await Committee.findByIdAndDelete(id);
