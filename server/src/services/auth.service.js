@@ -59,7 +59,7 @@ export const signupService = async (data) => {
         data: { otp, name: `${savedUser.firstname} ${savedUser.lastname}` },
       });
     } catch (emailError) {
-      // console.error("Failed to send OTP email:", emailError);
+      console.error("Failed to send OTP email:", emailError);
       // Don't throw error, user is created, they can request OTP again
     }
 

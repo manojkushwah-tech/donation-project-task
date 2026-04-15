@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 dotenv.config();
-
+ 
 // =============== Nodemailer Configuration ===============
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,      // e.g., smtp.gmail.com / smtp.mailgun.org

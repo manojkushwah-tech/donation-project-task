@@ -14,7 +14,7 @@ export function CommitteeForm({ initialData, onSubmit, onCancel, loading }: Comm
     name: '',
     designation: '',
     image: '',
-    status: true,
+    // status: true,
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
@@ -32,7 +32,7 @@ export function CommitteeForm({ initialData, onSubmit, onCancel, loading }: Comm
     const data = new FormData();
     data.append('name', formData.name);
     data.append('designation', formData.designation);
-    data.append('status', String(formData.status));
+    // data.append('status', String(formData.status));
     if (imageFile) {
       data.append('image', imageFile);
     }

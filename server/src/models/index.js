@@ -3,4 +3,6 @@ import Committee from "./committee.model.js";
 import FAQ from "./faq.model.js";
 import ServiceAvailable from "./service.available.js";
 import User from "./user.model.js";
-export { Event, Committee, FAQ, ServiceAvailable, User };
+import Payment from "./payment.model.js";
+import Transaction from "./transaction.model.js";
+export { Event, Committee, FAQ, ServiceAvailable, User, Payment, Transaction };

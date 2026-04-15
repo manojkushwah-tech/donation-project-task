@@ -8,7 +8,7 @@ const errorResponse = (
     return res.status(statusCode).json({
         status: false,
         statusCode,
-        msg: message,
+        message: message, //cp
         errors,
     });
 };
@@ -24,7 +24,7 @@ const successResponse = (
     return res.status(statusCode).json({
         status: true,
         statusCode,
-        msg: message,
+        message: message, // cp
         data,
     });
 };

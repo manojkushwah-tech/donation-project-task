@@ -21,7 +21,7 @@ export const createCommittee = async (req, res) => {
   try {
 
     const data = req.validatedData;
-    console.log("check file", req.file);
+    // console.log("check file", req.file);
     await createCommitteeService(data, req.file);
     return successResponse(
       res,

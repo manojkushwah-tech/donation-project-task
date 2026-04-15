@@ -1,5 +1,7 @@
 import transporter from "../config/nodemailer.config.js";
+import dotenv from "dotenv";
 
+dotenv.config();
 // ================= OTP Email Template =================
 const otpTemplate = (data) => `
 <!DOCTYPE html>

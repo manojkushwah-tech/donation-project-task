@@ -107,6 +107,25 @@ export const adminMessages = {
   INVALID_TOKEN: "Invalid or expired token",
 };
 
+export const paymentMessages = {
+  ORDER_CREATED: "Payment order created successfully",
+  ORDER_CREATION_FAILED: "Failed to create payment order",
+  PAYMENT_SUCCESS: "Payment completed successfully",
+  PAYMENT_FAILED: "Payment failed",
+  PAYMENT_USER_CREATED: "User account created and payment initiated successfully",
+  PAYMENT_VERIFIED: "Payment verified successfully",
+  PAYMENT_VERIFICATION_FAILED: "Payment verification failed",
+  PAYMENT_NOT_FOUND: "Payment record not found",
+  PAYMENTS_FETCHED: "Payments fetched successfully",
+  PAYMENT_STATUS_UPDATED: "Payment status updated successfully",
+  INVALID_SIGNATURE: "Invalid payment signature",
+  PAYMENT_ALREADY_PROCESSED: "This payment has already been processed",
+  REFUND_INITIATED: "Refund initiated successfully",
+  REFUND_FAILED: "Refund failed",
+  ACCOUNT_MISMATCH: "Email does not match the account",
+  INVALID_AMOUNT: "Amount must be greater than 0",
+};
+
 export const image = {
   allowedMime: {
     JPEG: "image/jpeg",
