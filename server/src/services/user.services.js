@@ -21,3 +21,51 @@ export const getUserService = async (userId) => {
     throw new ApiError("Failed to fetch user details", httpStatus.INTERNAL_SERVER_ERROR);
   }
 };
+
+export const getUsersService = async ({ page = 1, limit = 20, search, status, role, sortBy = "-createdAt" }) => {
+  try {
+    const query = {};
+
+    if (search) {
+      const searchRegex = new RegExp(search.trim(), "i");
+      query.$or = [
+        { firstname: searchRegex },
+        { lastname: searchRegex },
+        { email: searchRegex },
+        { phone: searchRegex },
+      ];
+    }
+
+    if (status !== undefined) {
+      query.status = status === "false" ? false : true;
+    }
+
+    if (role) {
+      query.role = role;
+    }
+
+    const skip = (Math.max(page, 1) - 1) * Math.max(limit, 1);
+    const users = await User.find(query)
+      .select("-password -otp")
+      .sort(sortBy)
+      .skip(skip)
+      .limit(Math.max(limit, 1))
+      .lean();
+
+    const totalRecords = await User.countDocuments(query);
+    const totalPages = Math.ceil(totalRecords / Math.max(limit, 1));
+
+    return {
+      message: "Users fetched successfully",
+      users,
+      pagination: {
+        currentPage: Number(page),
+        totalPages,
+        totalRecords,
+        limit: Number(limit),
+      },
+    };
+  } catch (error) {
+    throw new ApiError(error.message || "Failed to fetch users", httpStatus.INTERNAL_SERVER_ERROR);
+  }
+};

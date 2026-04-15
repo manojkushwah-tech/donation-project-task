@@ -2,10 +2,15 @@ import { z } from "zod";
 
 // ================= Create Payment Order Validation =================
 export const createPaymentOrderValidator = z.object({
-  name: z
+  firstName: z
     .string()
-    .min(2, "Name must be at least 2 characters")
-    .max(100, "Name must be at most 100 characters")
+    .min(2, "First name must be at least 2 characters")
+    .max(100, "First name must be at most 100 characters")
+    .trim(),
+  lastName: z
+    .string()
+    .min(2, "Last name must be at least 2 characters")
+    .max(100, "Last name must be at most 100 characters")
     .trim(),
   email: z
     .string()

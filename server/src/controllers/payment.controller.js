@@ -5,6 +5,7 @@ import {
   verifyPaymentService,
   getPaymentService,
   getAllPaymentsService,
+  getUserTransactionsService,
   refundPaymentService,
   updatePaymentStatusService,
   getPaymentAnalyticsService,
@@ -70,6 +71,20 @@ export const getUserPayments = asyncHandler(async (req, res) => {
     },
     httpStatus.OK
   );
+});
+
+export const getUserTransactions = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const { page = 1, limit = 20, type, status } = req.query;
+  const result = await getUserTransactionsService({
+    userId,
+    page: parseInt(page),
+    limit: parseInt(limit),
+    type,
+    status,
+  });
+
+  successResponse(res, result.message, result, httpStatus.OK);
 });
 
 // ================= ADMIN ROUTES =================

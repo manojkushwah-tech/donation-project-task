@@ -70,7 +70,7 @@ const createRazorpaySubscription = async ({ planId, customerId, totalCount, note
     customer_id: customerId,
     total_count: totalCount,
     quantity: 1,
-    customer_notify: true,
+    // customer_notify: true,
     notes,
   });
 
@@ -79,8 +79,16 @@ const createRazorpaySubscription = async ({ planId, customerId, totalCount, note
 
 // ================= Create Payment Order Service =================
 export const createPaymentOrderService = async (data, userId) => {
-  const { name, email, phone, amount
-    , type = "DONATION" } = data;
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    amount,
+    type = "DONATION",
+    durationMonths,
+    description,
+  } = data;
   const paymentType = type.toUpperCase() === "SIP" ? "SIP" : "DONATION";
 
   try {
@@ -89,39 +97,13 @@ export const createPaymentOrderService = async (data, userId) => {
       throw new ApiError(paymentMessages.INVALID_AMOUNT, httpStatus.BAD_REQUEST);
     }
 
-    let user = await User.findById(userId);
-    let userCreated = false;
-
-    // If user doesn't exist in DB, create a new account
+    const user = await User.findById(userId);
     if (!user) {
-      // Check if email already exists
-      const existingUser = await User.findOne({ email: email.toLowerCase() });
-      if (existingUser && existingUser._id.toString() !== userId) {
-        throw new ApiError("User with this email already exists", httpStatus.CONFLICT);
-      }
+      throw new ApiError("Authenticated user or created guest user is required", httpStatus.UNAUTHORIZED);
+    }
 
-      // Password is required for new account creation
-      if (!password) {
-        throw new ApiError("Password is required for new account creation", httpStatus.BAD_REQUEST);
-      }
-
-      const newUser = new User({
-        firstname: name.split(" ")[0] || name,
-        lastname: name.split(" ").slice(1).join(" ") || "",
-        email: email.toLowerCase(),
-        phone,
-        password: await User.prototype.encryptPassword(password),
-        isVerified: true, // Auto-verify for payment users
-        status: true,
-      });
-
-      user = await newUser.save();
-      userCreated = true;
-    } else {
-      // Verify email match for existing user
-      if (user.email !== email.toLowerCase()) {
-        throw new ApiError(paymentMessages.ACCOUNT_MISMATCH, httpStatus.BAD_REQUEST);
-      }
+    if (user.email !== email.toLowerCase()) {
+      throw new ApiError(paymentMessages.ACCOUNT_MISMATCH, httpStatus.BAD_REQUEST);
     }
 
     const receiptId = generateReceiptId();
@@ -130,11 +112,11 @@ export const createPaymentOrderService = async (data, userId) => {
 
     if (paymentType === "SIP") {
       const normalizedEmail = email.toLowerCase();
-      const razorpayCustomer = await findOrCreateRazorpayCustomer({ name, email: normalizedEmail, phone });
+      const razorpayCustomer = await findOrCreateRazorpayCustomer({ firstName, lastName, email: normalizedEmail, phone });
       const plan = await createRazorpayPlan({
         amount: Math.round(amount * 100),
         description: description || "Monthly SIP donation",
-        name,
+        name: `${firstName} ${lastName}`,
       });
 
       const totalCount = durationMonths || 12;
@@ -145,13 +127,13 @@ export const createPaymentOrderService = async (data, userId) => {
         notes: {
           userId: user._id.toString(),
           userEmail: normalizedEmail,
-          userName: name,
+          userName: `${firstName} ${lastName}`,
         },
       });
 
       payment = new Payment({
         user: user._id,
-        name,
+        name: `${firstName} ${lastName}`,
         email: normalizedEmail,
         phone,
         amount,
@@ -196,7 +178,7 @@ export const createPaymentOrderService = async (data, userId) => {
         planId: plan.id,
         customerId: razorpayCustomer.id,
         shortUrl: subscription.short_url,
-        amount: amount,
+        amount,
         currency: "INR",
         keyId: process.env.RAZORPAY_KEY_ID,
         name,
@@ -209,17 +191,17 @@ export const createPaymentOrderService = async (data, userId) => {
         currency: "INR",
         receipt: receiptId,
         description: description || "Payment for donation",
-        customer_notify: 1,
+        // customer_notify: 1,
         notes: {
           userId: user._id.toString(),
           userEmail: user.email,
-          userName: name,
+          userName: `${firstName} ${lastName}`,
         },
       });
 
       payment = new Payment({
         user: user._id,
-        name,
+        name: `${firstName} ${lastName}`,
         email: email.toLowerCase(),
         phone,
         amount,
@@ -254,12 +236,12 @@ export const createPaymentOrderService = async (data, userId) => {
       paymentResponse = {
         type: "DONATION",
         orderId: razorpayOrder.id,
-        amount: amount,
+        amount,
         currency: "INR",
         receipt: receiptId,
         keyId: process.env.RAZORPAY_KEY_ID,
-        name,
-        email,
+        name: `${firstName} ${lastName}`,
+        email: email.toLowerCase(),
         phone,
       };
     }
@@ -268,9 +250,9 @@ export const createPaymentOrderService = async (data, userId) => {
       message: paymentMessages.ORDER_CREATED,
       payment: paymentResponse,
       userId: user._id,
-      userCreated,
     };
   } catch (error) {
+    console.error("Create Payment Order Service Error:", error);
     if (error instanceof ApiError) {
       throw error;
     }
@@ -396,6 +378,54 @@ export const getPaymentService = async (paymentId) => {
       throw error;
     }
     throw new ApiError("Failed to fetch payment", httpStatus.INTERNAL_SERVER_ERROR);
+  }
+};
+
+// ================= Get User Transactions Service =================
+export const getUserTransactionsService = async ({ userId, page = 1, limit = 20, type, status }) => {
+  try {
+    const query = { user: userId };
+
+    if (type) {
+      const normalizedType = type.toUpperCase();
+      if (normalizedType === "SIP") {
+        query.type = { $in: ["SUBSCRIPTION_CREATED", "SUBSCRIPTION_AUTHORIZED"] };
+      } else if (normalizedType === "DONATION") {
+        query.type = { $in: ["ORDER_CREATED", "PAYMENT_COMPLETED"] };
+      } else if (normalizedType === "REFUND") {
+        query.type = "REFUND_PROCESSED";
+      } else {
+        query.type = normalizedType;
+      }
+    }
+
+    if (status) {
+      query.status = status;
+    }
+
+    const skip = (page - 1) * limit;
+    const [transactions, totalRecords] = await Promise.all([
+      Transaction.find(query)
+        .populate("payment", "type amount status razorpayOrderId razorpaySubscriptionId")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      Transaction.countDocuments(query),
+    ]);
+
+    return {
+      message: "User transactions fetched successfully",
+      transactions,
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil(totalRecords / limit),
+        totalRecords,
+        limit,
+      },
+    };
+  } catch (error) {
+    throw new ApiError(error.message || "Failed to fetch user transactions", httpStatus.INTERNAL_SERVER_ERROR);
   }
 };
 

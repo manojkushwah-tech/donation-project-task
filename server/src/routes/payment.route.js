@@ -4,6 +4,7 @@ import {
   verifyPayment,
   getPaymentDetails,
   getUserPayments,
+  getUserTransactions,
   getAllPayments,
   updatePaymentStatus,
   refundPayment,
@@ -14,6 +15,7 @@ import {
   getPaymentSummary,
 } from "../controllers/payment.controller.js";
 import { verifyUser, verifyAdmin } from "../middlewares/token.verify.middleware.js";
+import { attachOrCreatePaymentUser } from "../middlewares/payment.user.middleware.js";
 import { validate } from "../middlewares/zod.validate.middleware.js";
 import {
   createPaymentOrderValidator,
@@ -29,8 +31,8 @@ const router = express.Router();
 // Create payment order (can be called with or without auth)
 router.post(
   "/create-order",
-  // Optional auth - removed verifyUser to allow non-authenticated users
   validate(createPaymentOrderValidator),
+  attachOrCreatePaymentUser,
   createPaymentOrder
 );
 
@@ -45,6 +47,9 @@ router.post(
 
 // Get user's payments
 router.get("/user/my-payments", verifyUser, getUserPayments);
+
+// Get user's transactions
+router.get("/user/transactions", verifyUser, getUserTransactions);
 
 // Get payment details
 router.get("/:paymentId", verifyUser, getPaymentDetails);
