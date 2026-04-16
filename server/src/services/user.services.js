@@ -69,3 +69,28 @@ export const getUsersService = async ({ page = 1, limit = 20, search, status, ro
     throw new ApiError(error.message || "Failed to fetch users", httpStatus.INTERNAL_SERVER_ERROR);
   }
 };
+
+export const updateUserStatusService = async (userId, status) => {
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      throw new ApiError("User not found", httpStatus.NOT_FOUND);
+    }
+
+    user.status = status;
+    await user.save();
+
+    const updatedUser = await User.findById(userId).select("-password -otp");
+
+    return {
+      message: "User status updated successfully",
+      user: updatedUser,
+    };
+  } catch (error) {
+    if (error instanceof ApiError) {
+      throw error;
+    }
+    throw new ApiError(error.message || "Failed to update user status", httpStatus.INTERNAL_SERVER_ERROR);
+  }
+};

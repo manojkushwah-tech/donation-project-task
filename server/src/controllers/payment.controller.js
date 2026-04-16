@@ -25,7 +25,8 @@ export const createPaymentOrder = asyncHandler(async (req, res) => {
 
 // ================= Verify Payment Controller =================
 export const verifyPayment = asyncHandler(async (req, res) => {
-  const result = await verifyPaymentService(req.body);
+  const data = req.validatedData;
+  const result = await verifyPaymentService(data);
   successResponse(res, result.message, result, httpStatus.OK);
 });
 

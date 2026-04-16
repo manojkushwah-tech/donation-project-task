@@ -1,6 +1,6 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import { successResponse, errorResponse } from "../helper/response.helper.js";
-import { getUserService, getUsersService } from "../services/user.services.js";
+import { getUserService, getUsersService, updateUserStatusService } from "../services/user.services.js";
 import { httpStatus, roles } from "../helper/constants.js";
 import { User } from "../models/index.js";
 
@@ -24,5 +24,12 @@ export const getAllUsers = asyncHandler(async (req, res) => {
     sortBy,
   });
   successResponse(res, result.message, result, httpStatus.OK);
+});
+
+export const updateUserStatus = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  const { status } = req.validatedData;
+  const result = await updateUserStatusService(userId, status);
+  successResponse(res, result.message, result.user, httpStatus.OK);
 });
 

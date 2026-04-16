@@ -5,4 +5,6 @@ import ServiceAvailable from "./service.available.js";
 import User from "./user.model.js";
 import Payment from "./payment.model.js";
 import Transaction from "./transaction.model.js";
-export { Event, Committee, FAQ, ServiceAvailable, User, Payment, Transaction };
+import Room from "./room.model.js";
+import Booking from "./booking.model.js";
+export { Event, Committee, FAQ, ServiceAvailable, User, Payment, Transaction, Room, Booking };
